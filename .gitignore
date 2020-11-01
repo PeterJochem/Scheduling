@@ -1,2 +1,3 @@
 build/
 helloWorld.cpp
+*.swp

@@ -1,3 +1,5 @@
+/** @brief Describe me   
+ */
 #include <string>
 
 class recipeStep {
@@ -9,6 +11,7 @@ class recipeStep {
 		bool isCooking();
 		std::string getRecipeId();
 		double getTimeToComplete();
+		friend std::ostream & operator << (std::ostream &out, const recipeStep &step);
 	private:
 		std::string recipe_id;	
 		int stepNum;

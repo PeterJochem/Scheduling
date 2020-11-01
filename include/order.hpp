@@ -10,8 +10,9 @@ class order {
 		order(std::vector<std::string> recipeIds);
 		int getNumRecipes();
 		void setNumRecipes(int); 
+		recipe* getRecipe(int);
 
 	private:
 		std::vector<recipe> allRecipes;
-		int numRecipes; 	
+		int numRecipes;
 };
