@@ -7,6 +7,6 @@
 (asparagus_soup,7,c,30)
 (asparagus_soup,8,i,40)
 (asparagus_soup,9,c,900)
-(asparagus_soup,10 c,60)
+(asparagus_soup,10,c,60)
 (asparagus_soup,11,i,10)
 (asparagus_soup,12,c,20)

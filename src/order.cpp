@@ -1,11 +1,12 @@
-/** @brief   
- */
+/** @brief Implements the order abstraction */
 #include <string>
 #include <vector>
 #include <iostream>
+#include <bits/stdc++.h>
 #include "../include/order.hpp" 
 
-/** Constructor */
+/** @brief Constructor for recipe order
+ *  @param recipeIds is a list of names of txt files describing recipes */
 order::order(std::vector<std::string> recipeIds) {
 	using namespace std;
 
@@ -24,26 +25,167 @@ order::order(std::vector<std::string> recipeIds) {
 		}
 	}			
 
-	//std::cout << allRecipes;
+	// std::cout << allRecipes; Helpful for debugging
+		
+	// Construct priority_queue of pointers to the above vector
+	// this->nextAction = priority_queue<recipe*>();
+	for (auto itr = allRecipes.begin(); itr < allRecipes.end(); itr++) {
+		this->nextAction.push(&(*itr));
+	}
 }
 
+/** @brief Create the given schedule and 
+ *  @param scheduleName The name of the schedule
+ *  Will be written to _____/scheduleName 
+ *  @return vector of start times for each step */
+void order::createSchedule(std::string& scheduleName) { 
+	using namespace std; 
+
+	string pathPrefix = "../____"; // Where to write the schedule as csv
+		
+	double currentTime = 0.0;
+	double time_increment = 0.5;
+	bool isDispenserBusy;
+
+	while (!isOrderDone()) {
+		
+		checkForFinishedSteps(currentTime);			
+		updateDispenserPriorities();
+		isDispenserBusy = isDispenserInUse(currentTime);		
+
+		if (!isDispenserBusy) {
+			// Schedule recipe at top of the queue whose is a) free and b) needs dispenser for next instruction
+			scheduleDispenser(currentTime);
+		}
+
+		scheduleCooking(currentTime);			
+		currentTime = currentTime + time_increment;
+	}	
+}
+
+/** @brief Describe me */
+void order::updateDispenserPriorities() { 
+	// SORT the priority queue
+                        // Find the min element. Add a new item of even lower value. Sort the queue again 
+	
+		
+				
+}
+
+/** @brief Describe me  */
+void order::scheduleDispenser(double currentTime) { 	
+	using namespace std;
+		
+	recipe* maxPriority = nullptr;
+	double maxPriorityScore = INT_MIN + 1;
+	for (int index = 0; index < allRecipes.size(); index++) {
+       		
+		recipe* nextRecipe = &(allRecipes[index]);	
+		recipeStep* nextStep = nextRecipe->nextUndoneStep();
+
+                if (nextStep && !nextStep->getHasStarted() && !nextStep->isDone(currentTime)) {
+			
+			if (nextRecipe->orderingScore() > maxPriorityScore) {
+				maxPriority = &(allRecipes[index]);
+				maxPriorityScore = nextRecipe->orderingScore();
+				//cout << "set maxPriority" << endl;
+			}		
+		}
+	}
+	
+	if (maxPriority) { 
+		// start process
+		maxPriority->nextUndoneStep()->startStep(currentTime);
+	}
+}
+
+void order::scheduleCooking(double currentTime) {
+	using namespace std;
+
+	// Then schedule for the other recipes - RECIPE centric
+        // Traverse the list of recipes and try to start useful work for each
+	for (vector<recipe>::iterator itr = allRecipes.begin(); itr < allRecipes.end(); itr++) {
+
+       		recipeStep* nextStep = itr->nextUndoneStep();
+                if (nextStep && !nextStep->getHasStarted() && nextStep->isCooking()) {
+                	// start process
+                	nextStep->startStep(currentTime);
+           	}
+       }
+}
+
+
 /** Describe me */
+void order::checkForFinishedSteps(double currentTime) {
+	using namespace std;
+
+	for (vector<recipe>::iterator itr = allRecipes.begin(); itr < allRecipes.end(); itr++) {
+                        recipeStep* nextStep = itr->nextUndoneStep();
+
+                        // check if done at new time
+                        if (nextStep && nextStep->isDone(currentTime)) {
+                                // Mark step as done
+                                nextStep->markAsDone(currentTime);
+                                // move recipe object to the next step, but don't begin it yet
+                                nextStep = itr->nextStep();
+                        }
+                }
+}
+
+bool order::isDispenserInUse(double currentTime) { 
+	using namespace std; 
+	
+	bool inUse = false;	
+	for (vector<recipe>::iterator itr = allRecipes.begin(); itr < allRecipes.end(); itr++) {
+                        recipeStep* nextStep = itr->nextUndoneStep();
+
+                        if (nextStep && nextStep->getHasStarted() && !nextStep->isDone(currentTime) && nextStep->isIngredient()) {
+                        	inUse = true;
+			}
+                }
+
+	return inUse;
+}
+
+/** @brief Check if the order is completed 
+ *  @return True if all recipes of order are done. Else false */
+bool order::isOrderDone() { 
+	using namespace std; 
+
+	for (vector<recipe>::iterator itr = allRecipes.begin(); itr < allRecipes.end(); itr++) {
+		if (!(itr->isDone())) {
+			return false;
+		}		
+	}
+
+	return true;
+}
+
+
+/** @brief Compute and return refrence to the recipe at the given index
+ *  @param index The index into the list of recipes 
+ *  @return Refrence to recipe at index. nullptr if index is invalid */
 recipe* order::getRecipe(int index) { 
 	
 	if (index < 0 || index >= numRecipes) {
 		return nullptr;
 	}
-			
-	return &(allRecipes[index]);	
+		
+	auto itr_outer = allRecipes.begin();
+	for (int i = 0; i < index; i++) {
+		itr_outer++;
+	}
 
+	return &(*itr_outer);	
 }
 
 std::ostream & operator << (std::ostream &out, const std::vector<recipe> &allRecipes) {
         
-	for (int i = 0; i < allRecipes.size(); i++) {
-		for (int j = 0; j < allRecipes[i].allSteps.size(); j++) {
-                	out << allRecipes[i].allSteps[i];
+	for (auto itr_outer = allRecipes.begin(); itr_outer < allRecipes.end(); itr_outer++) {
+		for (int j = 0; j < itr_outer->allSteps.size(); j++) {
+                	out << itr_outer->allSteps[j];
         	}
 	}
+
         return out;
 }
