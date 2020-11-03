@@ -68,6 +68,13 @@ double recipeStep::getStartTime() {
 	return startTime;
 }
 
+char recipeStep::type() {
+        if (isIngredient()) {
+                return 'i';
+        }
+        return 'c';
+}
+
 /** Overloads << operator to easily easily display data structure */
 std::ostream & operator << (std::ostream &out, const recipeStep &step) { 
 	out << "recipe_id = " << step.recipe_id << "\t\tstepNum = " << step.stepNum << "\t\tc/i = ";

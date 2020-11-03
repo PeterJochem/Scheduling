@@ -16,6 +16,7 @@ class recipeStep {
 		bool getHasStarted(void);
 		void startStep(double);
 		bool markAsDone(double);
+		char type();
 		friend std::ostream & operator << (std::ostream &out, const recipeStep &step);
 	private:
 		std::string recipe_id;	

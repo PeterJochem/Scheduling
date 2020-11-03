@@ -45,8 +45,7 @@ TEST(Scheduler, test_single_recipe_scheduling) {
 	vector<string> recipe_ids = {"chocolate_ice_cream.txt"};
         order newOrder = order(recipe_ids);
 
-        string fileName = "myFile.txt";
-        
+	string fileName = "bbb";
 	newOrder.createSchedule(fileName);	
 	
 	vector<double> schedule = newOrder.getRecipe(0)->recoverStartTimes();	
@@ -65,7 +64,7 @@ TEST(Scheduler, test_multiple_recipes_scheduling) {
         vector<string> recipe_ids = {"chocolate_ice_cream.txt", "asparagus_soup.txt", "carrot_soup.txt", "mushroom_risotto.txt", "sabayon.txt"};
         order newOrder = order(recipe_ids);
 
-        string fileName = "myFile.txt";
+	string fileName = "aaa";
         newOrder.createSchedule(fileName);
 }
 

@@ -11,6 +11,7 @@
 recipe::recipe(std::string recipeDef) {
 	using namespace std;
 
+	recipe_id = recipeDef;
 	allSteps = vector<recipeStep>();	
 	string prefix = "../allRecipes/";
 	string nextLine;	
@@ -145,6 +146,10 @@ recipeStep* recipe::nextStep() {
 	recipeStep* nextStep = &(allSteps[currentStep]);
 	currentStep++;
 	return nextStep;
+}
+
+std::string recipe::getRecipeID() {
+        return recipe_id;
 }
 
 std::ostream & operator << (std::ostream &out, const recipe &recipe) { 

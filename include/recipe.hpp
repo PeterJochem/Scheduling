@@ -13,6 +13,7 @@ class recipe {
 		recipeStep* nextUndoneStep(); // Only returns pointer to the next step  
 		double orderingScore();
 		bool isDone();
+		std::string getRecipeID();
 		std::vector<double> recoverStartTimes();
 		friend std::ostream & operator << (std::ostream &out, const recipe &recipe);
 		friend std::ostream & operator << (std::ostream &out, const std::vector<recipe> &allRecipes);
@@ -22,6 +23,7 @@ class recipe {
 		int currentStep;
 		int totalSteps;
 		
+		std::string recipe_id;		
 		bool workInProgress; // Is useful work being done on this recipe at this time
 		double timeWhenReady; // Denotes when step in process will be completed 
 };

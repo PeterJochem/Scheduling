@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <fstream> 
 #include <bits/stdc++.h>
 #include "../include/order.hpp" 
 
@@ -41,8 +42,6 @@ order::order(std::vector<std::string> recipeIds) {
 void order::createSchedule(std::string& scheduleName) { 
 	using namespace std; 
 
-	string pathPrefix = "../____"; // Where to write the schedule as csv
-		
 	double currentTime = 0.0;
 	double time_increment = 0.5;
 	bool isDispenserBusy;
@@ -55,12 +54,32 @@ void order::createSchedule(std::string& scheduleName) {
 
 		if (!isDispenserBusy) {
 			// Schedule recipe at top of the queue whose is a) free and b) needs dispenser for next instruction
-			scheduleDispenser(currentTime);
+			scheduleDispenser(currentTime);	
 		}
 
 		scheduleCooking(currentTime);			
 		currentTime = currentTime + time_increment;
-	}	
+	}
+
+	// Write each instruction, in order, to the csv file
+	writeToCSV(scheduleName);
+}
+
+/** @brief Describe me */
+void order::writeToCSV(std::string& scheduleName) { 
+	using namespace std;
+
+	string relativePath = "../allSchedules/"; 
+
+	// Write the list of recipe_ids to the file path/recipe_ids.csv
+	ofstream ofs(relativePath + scheduleName);
+	
+	for (auto itr = schedule.begin(); itr < schedule.end(); itr++) {
+		
+		auto[recipe_id, recipe_type, startTime, duration] = *itr;
+		ofs << recipe_id << "," << recipe_type << "," << startTime << "," << duration << "\n";
+	}		
+	
 }
 
 /** @brief Describe me */
@@ -88,16 +107,18 @@ void order::scheduleDispenser(double currentTime) {
 			if (nextRecipe->orderingScore() > maxPriorityScore) {
 				maxPriority = &(allRecipes[index]);
 				maxPriorityScore = nextRecipe->orderingScore();
-				//cout << "set maxPriority" << endl;
 			}		
 		}
 	}
 	
 	if (maxPriority) { 
 		// start process
-		maxPriority->nextUndoneStep()->startStep(currentTime);
+		recipeStep* nextStep = maxPriority->nextUndoneStep();	
+		this->schedule.push_back(make_tuple(maxPriority->getRecipeID(), nextStep->type(), currentTime, nextStep->getTimeToComplete()));	
+		nextStep->startStep(currentTime);
 	}
 }
+
 
 void order::scheduleCooking(double currentTime) {
 	using namespace std;
@@ -109,7 +130,8 @@ void order::scheduleCooking(double currentTime) {
        		recipeStep* nextStep = itr->nextUndoneStep();
                 if (nextStep && !nextStep->getHasStarted() && nextStep->isCooking()) {
                 	// start process
-                	nextStep->startStep(currentTime);
+            		this->schedule.push_back(make_tuple(itr->getRecipeID(), nextStep->type(), currentTime, nextStep->getTimeToComplete()));
+			nextStep->startStep(currentTime);
            	}
        }
 }

@@ -1,6 +1,9 @@
 cmake_minimum_required (VERSION 2.8.11)
 project (Robot_Food_Scheduler)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 find_package(GTest REQUIRED)
 
 add_library(schedulingLibrary src/order.cpp include/order.hpp src/recipe.cpp include/recipe.hpp src/recipeStep.cpp include/recipeStep.hpp)
