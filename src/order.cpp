@@ -69,7 +69,7 @@ void order::createSchedule(std::string& scheduleName) {
 void order::writeToCSV(std::string& scheduleName) { 
 	using namespace std;
 
-	string relativePath = "../allSchedules/"; 
+	string relativePath = "../schedules/"; 
 
 	// Write the list of recipe_ids to the file path/recipe_ids.csv
 	ofstream ofs(relativePath + scheduleName);

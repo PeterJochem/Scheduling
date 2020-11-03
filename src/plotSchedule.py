@@ -1,8 +1,9 @@
-import matplotlib.pyplot as plt 
 import re
 import sys
+import matplotlib.pyplot as plt 
+import matplotlib.patches as mpatches
 
-schedule = open("../allSchedules/schedule.csv", "r")
+schedule = open("../schedules/schedule.csv", "r")
 
 allSteps = []
 allRecipe_ids = []
@@ -25,16 +26,22 @@ allSteps.sort(key = lambda x: x[0])
 
 fig, gnt = plt.subplots()
 
+plt.title('Cooking Schedule')
 gnt.set_ylim(0, 65)
 gnt.set_xlim(0, finalEndTime)
 gnt.set_xlabel('time(s)')
 gnt.set_ylabel('Recipe_id')
 
-yTicks = [15, 25, 35, 45, 55]
+yTicks = [10, 20, 30, 40, 50]
 gnt.set_yticks(yTicks)
-gnt.set_yticklabels(allRecipe_ids)
+gnt.set_yticklabels([1, 2, 3, 4, 5])
 gnt.grid(True)
 
+cookingColor = ('tab:orange')
+dispensingColor = ('tab:blue')
+orange_patch = mpatches.Patch(color='orange', label='Cooking')
+blue_patch = mpatches.Patch(color='blue', label='Dispensing')
+plt.legend(handles=[orange_patch, blue_patch])
 
 for i in range(len(allRecipe_ids)):
     for item in allSteps:
@@ -42,7 +49,10 @@ for i in range(len(allRecipe_ids)):
         recipe_id, step_type, startTime, duration = item
         if (recipe_id == allRecipe_ids[i]):
             # add gant chart item 
-            gnt.broken_barh([(float(startTime), float(duration))], (yTicks[i], 5), facecolors =('tab:orange'))  
+            if (step_type == 'c'):
+                gnt.broken_barh([(float(startTime), float(duration))], (yTicks[i], 5), facecolors=cookingColor)  
+            else:
+                gnt.broken_barh([(float(startTime), float(duration))], (yTicks[i], 5), facecolors=dispensingColor)
 
 
 plt.savefig("schedule.png") 

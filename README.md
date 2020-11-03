@@ -23,7 +23,7 @@ I used gtest to create unit tests. test/runUnitTests has a set of tests for crea
 ```./runUnitTests```
 
 # Dependencies
-matplotlib, (```pip install matplotlib```)
+matplotlib, (```pip install matplotlib```) <br />
 C++ 14 <br />
 Python3 <br />
 CMake <br />
