@@ -34,9 +34,7 @@ order::order(std::vector<std::string> recipeIds) {
 }
 
 /** @brief Create the schedule and write it to a csv for plotting 
- *  @param scheduleName The name of the schedule
- *  Will be written to scheules/scheduleName 
- *  @return vector of start times for each step */
+ *  Schedule is written as csv to schedules/scheduleName */
 void order::createSchedule(std::string& scheduleName) { 
 	using namespace std; 
 
