@@ -26,7 +26,8 @@ class order {
 		std::priority_queue<recipe*, std::vector<recipe*>, recipeCompare> nextAction;
 		//std::priority_queue<recipe*> nextAction; // Sort the actions we can take 
 		std::vector<recipe> allRecipes; // Static list of the recipes
-		std::vector<std::tuple<std::string, char, double, double>> schedule;
+		std::vector<std::tuple<std::string, char, double, double>> scheduleForCSV;
+		std::vector<std::tuple<std::string, char, double>> schedule;
 		int numRecipes;
 		bool isOrderDone();
 		bool isDispenserInUse(double);

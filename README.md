@@ -15,9 +15,15 @@ I thought a lot about how to compute the optimal schedule. The problem is simili
 
 My heurestic is for scheduling which recipe gets to use the dispenser at a given point in time. If more than one recipe needs the dispenser at a given point in time, the heurestic chooses which process gets to use it. The recipe with the next shortest recipe step is chosen. We want to minimize the total number of time slices where recipes are not accomplishing useful work. By giving priority to the recipe with a shorter time spent using the dispenser, we minimize the amount of time that the set of competing recipes is not not doing useful work but only over a very short time horizion. There is no guarantee that the heurestic will lead you to the globally optimum solution. 
 
+# Psuedocode
+Below is my an image of my main scheduling loop in my code. <br />
+![Example Gant Chart](media/pseudocode.png)
+
+To adapt the above pseudocode for the second problem, I just need to change how the function order::scheduleCooking() works. In this, we use the heurestic function to compute which recipe gets priority on the dispenser. My proposed heurestic function for the second problem is to give priority on the dispenser to the process with a closer target time. 
+
 
 # Results 
-Below is an example of the gant charts created by the scheduler. The blue sections indicate that the recipe is using the dispenser. The orange sections indicate that the recipe is cooking. The simple greedy policy performs pretty well. Since the cooking operations tend to be much longer than the dispensing operations, there are relatively few time slices where robots are idle. 
+Below is an example of the gant charts created by the scheduler. The blue sections indicate that the recipe is using the dispenser. The orange sections indicate that the recipe is cooking. The simple greedy policy performs pretty well. Since the cooking operations tend to be much longer than the dispensing operations, there are relatively few time slices where recipes are idle. 
 <br />  
 ![Example Gant Chart](media/schedule.png)
 

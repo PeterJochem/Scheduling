@@ -33,7 +33,7 @@ order::order(std::vector<std::string> recipeIds) {
 	}
 }
 
-/** @brief Create the given schedule and 
+/** @brief Create the schedule and write it to a csv for plotting 
  *  @param scheduleName The name of the schedule
  *  Will be written to scheules/scheduleName 
  *  @return vector of start times for each step */
@@ -69,7 +69,7 @@ void order::writeScheduleToCSV(std::string& scheduleName) {
 	string relativePath = "../schedules/"; 
 	ofstream ofs(relativePath + scheduleName);
 	
-	for (auto itr = schedule.begin(); itr < schedule.end(); itr++) {
+	for (auto itr = scheduleForCSV.begin(); itr < scheduleForCSV.end(); itr++) {
 		
 		auto[recipe_id, recipe_type, startTime, duration] = *itr;
 		ofs << recipe_id << "," << recipe_type << "," << startTime << "," << duration << "\n";
@@ -105,7 +105,8 @@ void order::scheduleDispenser(double currentTime) {
 	if (maxPriority) { 
 		// start process
 		recipeStep* nextStep = maxPriority->nextUndoneStep();	
-		this->schedule.push_back(make_tuple(maxPriority->getRecipeID(), nextStep->type(), currentTime, nextStep->getTimeToComplete()));	
+		this->schedule.push_back(make_tuple(maxPriority->getRecipeID(), nextStep->type(), currentTime));
+		this->scheduleForCSV.push_back(make_tuple(maxPriority->getRecipeID(), nextStep->type(), currentTime, nextStep->getTimeToComplete()));	
 		nextStep->startStep(currentTime);
 	}
 }
@@ -119,7 +120,8 @@ void order::scheduleCooking(double currentTime) {
        		recipeStep* nextStep = itr->nextUndoneStep();
                 if (nextStep && !nextStep->getHasStarted() && nextStep->isCooking()) {
                 	// start process
-            		this->schedule.push_back(make_tuple(itr->getRecipeID(), nextStep->type(), currentTime, nextStep->getTimeToComplete()));
+			this->schedule.push_back(make_tuple(itr->getRecipeID(), nextStep->type(), currentTime));
+            		this->scheduleForCSV.push_back(make_tuple(itr->getRecipeID(), nextStep->type(), currentTime, nextStep->getTimeToComplete()));
 			nextStep->startStep(currentTime);
            	}
        }
