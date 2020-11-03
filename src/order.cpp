@@ -45,7 +45,6 @@ void order::createSchedule(std::string& scheduleName) {
 	while (!isOrderDone()) {
 		
 		checkForFinishedSteps(currentTime);			
-		updateDispenserPriorities();
 		isDispenserBusy = isDispenserInUse(currentTime);		
 
 		if (!isDispenserBusy) {
@@ -72,12 +71,6 @@ void order::writeScheduleToCSV(std::string& scheduleName) {
 		auto[recipe_id, recipe_type, startTime, duration] = *itr;
 		ofs << recipe_id << "," << recipe_type << "," << startTime << "," << duration << "\n";
 	}			
-}
-
-/** @brief Describe me */
-void order::updateDispenserPriorities() { 
-	// SORT the priority queue
-                        // Find the min element. Add a new item of even lower value. Sort the queue again 				
 }
 
 /** @brief Choose which recipe has priority on the dispenser and start that step */
