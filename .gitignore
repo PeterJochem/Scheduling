@@ -2,4 +2,4 @@ build/
 helloWorld.cpp
 *.swp
 schedule.csv
-schedule.png
+src/schedule.png

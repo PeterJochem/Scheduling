@@ -1,4 +1,5 @@
 # How To Compile The Code
+```mkdir build``` <br />
 ```cd build``` <br />
 ```cmake ..``` <br />
 ```make```
@@ -10,7 +11,9 @@ Follow the steps above to compile and then from the build directory, run ```./cr
 I created a set of text files that describe recipes. The text files are at allRecipes/<recipe_name>.txt
 
 # Results 
-Show a schedule
+Below is an example of the gant charts created by the scheduler. <br />  
+![Example Gant Chart](media/schedule.png)
+
 
 
 # Unit Testing
