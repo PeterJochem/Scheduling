@@ -26,11 +26,10 @@ recipe::recipe(std::string recipeDef) {
 	}  	  				
 	
 	currentStep = 0;	
-	//std::cout << allSteps; Helpful for testing
 }
 
 /** @brief Scores the recipe for access to limited kitchen resources
- *  @return The recipe's score */
+ *  @return The recipe's priority score for the dispenser */
 double recipe::orderingScore() { 
 	
 	recipeStep* nextStep = nextUndoneStep();
@@ -42,14 +41,13 @@ double recipe::orderingScore() {
 		// The recipe's next step is cooking  
 		return INT_MIN;
 	}
-
 	
 	return (1.0/nextStep->getTimeToComplete());  
 }
 
-/** @brief 
- *  @return List of each starting time of the recipe
- */
+/** @brief Traverse the recipe after scheduling and recover a list of
+ *  when each step is scheduled to start
+ *  @return List of each starting time of the recipe */ 
 std::vector<double> recipe::recoverStartTimes() { 
 	using namespace std;
 
@@ -63,7 +61,6 @@ std::vector<double> recipe::recoverStartTimes() {
 	return startTimes;	
 }
 
-/** @brief Describe me  */
 bool recipe::isDone() {
 	
 	if (nextUndoneStep() == nullptr) {
@@ -73,7 +70,7 @@ bool recipe::isDone() {
 	return false;
 }
 
-/** @brief Create a new step in this recipe
+/** @brief Create a new step in this recipe by parsing string representation of step
  *  @param newLine is the string to parse step from */
 void recipe::addRecipeStep(std::string newLine) {
 	using namespace std;	

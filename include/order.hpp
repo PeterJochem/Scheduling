@@ -34,5 +34,5 @@ class order {
 		void checkForFinishedSteps(double);
 		void scheduleDispenser(double);
 		void scheduleCooking(double);
-		void writeToCSV(std::string&);
+		void writeScheduleToCSV(std::string&);
 };

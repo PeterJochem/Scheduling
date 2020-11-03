@@ -1,3 +1,4 @@
+# @brief This reads in a csv file of operations and creates a gant chart to visualize them 
 import re
 import sys
 import matplotlib.pyplot as plt 

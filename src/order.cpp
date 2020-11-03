@@ -26,8 +26,6 @@ order::order(std::vector<std::string> recipeIds) {
 		}
 	}			
 
-	// std::cout << allRecipes; Helpful for debugging
-		
 	// Construct priority_queue of pointers to the above vector
 	// this->nextAction = priority_queue<recipe*>();
 	for (auto itr = allRecipes.begin(); itr < allRecipes.end(); itr++) {
@@ -37,7 +35,7 @@ order::order(std::vector<std::string> recipeIds) {
 
 /** @brief Create the given schedule and 
  *  @param scheduleName The name of the schedule
- *  Will be written to _____/scheduleName 
+ *  Will be written to scheules/scheduleName 
  *  @return vector of start times for each step */
 void order::createSchedule(std::string& scheduleName) { 
 	using namespace std; 
@@ -61,37 +59,30 @@ void order::createSchedule(std::string& scheduleName) {
 		currentTime = currentTime + time_increment;
 	}
 
-	// Write each instruction, in order, to the csv file
-	writeToCSV(scheduleName);
+	writeScheduleToCSV(scheduleName);
 }
 
-/** @brief Describe me */
-void order::writeToCSV(std::string& scheduleName) { 
+/** @brief Write the order's scheduled list of steps to a csv file for plotting */
+void order::writeScheduleToCSV(std::string& scheduleName) { 
 	using namespace std;
 
 	string relativePath = "../schedules/"; 
-
-	// Write the list of recipe_ids to the file path/recipe_ids.csv
 	ofstream ofs(relativePath + scheduleName);
 	
 	for (auto itr = schedule.begin(); itr < schedule.end(); itr++) {
 		
 		auto[recipe_id, recipe_type, startTime, duration] = *itr;
 		ofs << recipe_id << "," << recipe_type << "," << startTime << "," << duration << "\n";
-	}		
-	
+	}			
 }
 
 /** @brief Describe me */
 void order::updateDispenserPriorities() { 
 	// SORT the priority queue
-                        // Find the min element. Add a new item of even lower value. Sort the queue again 
-	
-		
-				
+                        // Find the min element. Add a new item of even lower value. Sort the queue again 				
 }
 
-/** @brief Describe me  */
+/** @brief Choose which recipe has priority on the dispenser and start that step */
 void order::scheduleDispenser(double currentTime) { 	
 	using namespace std;
 		
@@ -119,12 +110,10 @@ void order::scheduleDispenser(double currentTime) {
 	}
 }
 
-
+/** @brief Schedule each idle process to start its next cooking operation */
 void order::scheduleCooking(double currentTime) {
 	using namespace std;
 
-	// Then schedule for the other recipes - RECIPE centric
-        // Traverse the list of recipes and try to start useful work for each
 	for (vector<recipe>::iterator itr = allRecipes.begin(); itr < allRecipes.end(); itr++) {
 
        		recipeStep* nextStep = itr->nextUndoneStep();
@@ -137,21 +126,18 @@ void order::scheduleCooking(double currentTime) {
 }
 
 
-/** Describe me */
+/** @brief Check if any of the running recipe steps is completed */
 void order::checkForFinishedSteps(double currentTime) {
 	using namespace std;
 
 	for (vector<recipe>::iterator itr = allRecipes.begin(); itr < allRecipes.end(); itr++) {
-                        recipeStep* nextStep = itr->nextUndoneStep();
-
-                        // check if done at new time
-                        if (nextStep && nextStep->isDone(currentTime)) {
-                                // Mark step as done
-                                nextStep->markAsDone(currentTime);
-                                // move recipe object to the next step, but don't begin it yet
-                                nextStep = itr->nextStep();
-                        }
-                }
+       		
+		recipeStep* nextStep = itr->nextUndoneStep();
+        	if (nextStep && nextStep->isDone(currentTime)) {
+                	nextStep->markAsDone(currentTime);
+                	itr->nextStep(); // move recipe object to the next step, but don't begin it yet
+        	}	
+	}
 }
 
 bool order::isDispenserInUse(double currentTime) { 
@@ -159,12 +145,12 @@ bool order::isDispenserInUse(double currentTime) {
 	
 	bool inUse = false;	
 	for (vector<recipe>::iterator itr = allRecipes.begin(); itr < allRecipes.end(); itr++) {
-                        recipeStep* nextStep = itr->nextUndoneStep();
-
-                        if (nextStep && nextStep->getHasStarted() && !nextStep->isDone(currentTime) && nextStep->isIngredient()) {
-                        	inUse = true;
-			}
-                }
+        	
+		recipeStep* nextStep = itr->nextUndoneStep();
+                if (nextStep && nextStep->getHasStarted() && !nextStep->isDone(currentTime) && nextStep->isIngredient()) {
+                	inUse = true;
+		}
+	}
 
 	return inUse;
 }

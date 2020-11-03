@@ -3,6 +3,7 @@ project (Robot_Food_Scheduler)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_compile_options(-w)
 
 find_package(GTest REQUIRED)
 

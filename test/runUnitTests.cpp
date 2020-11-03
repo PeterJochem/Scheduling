@@ -8,7 +8,7 @@
 TEST(Scheduler, read_In_One_Recipe) {	
 	using namespace std;
 			
-	vector<string> recipe_ids = {"chocolate_ice_cream.txt"};
+	vector<string> recipe_ids = {"chocolate_ice_cream"};
 	order newOrder = order(recipe_ids);
 	
 	// Check that data matches that in the .txt files
@@ -22,7 +22,7 @@ TEST(Scheduler, read_In_One_Recipe) {
 TEST(Scheduler, read_In_Multiple_Recipes) {
         using namespace std;
 
-        vector<string> recipe_ids = {"chocolate_ice_cream.txt", "mushroom_risotto.txt"};
+        vector<string> recipe_ids = {"chocolate_ice_cream", "mushroom_risotto"};
         order newOrder = order(recipe_ids);
 	
         // Check that data matches that in the .txt files
@@ -42,10 +42,10 @@ TEST(Scheduler, read_In_Multiple_Recipes) {
 TEST(Scheduler, test_single_recipe_scheduling) {
         using namespace std;
 
-	vector<string> recipe_ids = {"chocolate_ice_cream.txt"};
+	vector<string> recipe_ids = {"chocolate_ice_cream"};
         order newOrder = order(recipe_ids);
 
-	string fileName = "bbb";
+	string fileName = "unitTestSchedule1";
 	newOrder.createSchedule(fileName);	
 	
 	vector<double> schedule = newOrder.getRecipe(0)->recoverStartTimes();	
@@ -61,10 +61,10 @@ TEST(Scheduler, test_single_recipe_scheduling) {
 TEST(Scheduler, test_multiple_recipes_scheduling) {
         using namespace std;
 
-        vector<string> recipe_ids = {"chocolate_ice_cream.txt", "asparagus_soup.txt", "carrot_soup.txt", "mushroom_risotto.txt", "sabayon.txt"};
+        vector<string> recipe_ids = {"chocolate_ice_cream", "asparagus_soup", "carrot_soup", "mushroom_risotto", "sabayon"};
         order newOrder = order(recipe_ids);
 
-	string fileName = "aaa";
+	string fileName = "unitTestSchedule2";
         newOrder.createSchedule(fileName);
 }
 

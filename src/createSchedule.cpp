@@ -1,3 +1,4 @@
+/** @brief This reads in a command line list of recipes, checks if they are legal, and then creates the schedule */
 #include <iostream>
 #include <fstream>
 #include <algorithm>
@@ -6,8 +7,8 @@ using namespace std;
 
 tuple<vector<string>, bool> parseInputs(int numUserRecipes, char* userRecipes[]) { 
 	
-	vector<string> legal_recipes = {"asparagus_soup.txt", "carrot_soup.txt", "chili_con_carne.txt", "chocolate_ice_cream.txt", "mushroom_risotto.txt", 
-					"sabayon.txt", "strawberry_ice_cream.txt"};
+	vector<string> legal_recipes = {"asparagus_soup", "carrot_soup", "chili_con_carne", "chocolate_ice_cream", "mushroom_risotto", 
+					"sabayon", "strawberry_ice_cream"};
 	vector<string> legalUserRecipes;
 
 	if (userRecipes[0] == string("help")) {
